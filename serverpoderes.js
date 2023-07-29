@@ -51,10 +51,10 @@ heroes.get('/api/Heroes',(req, res)=>{
 
 });
 
-app.put('/api/Heroes/:id', (req, res) => {
+heroes.put('/api/Heroes/:id', (req, res) => {
 
 
-  const campos = [
+  const parametros = [
     req.params.id,
     req.body.nombre,
       req.body.identidad_secreta,
@@ -63,14 +63,14 @@ app.put('/api/Heroes/:id', (req, res) => {
   ];
 
   let sql = ` update tbl_heroes 
-                set nombre =  $2, 
+               set  nombre =  $2, 
                   identidad_secreta = $3,
-                  activo = $4,
-                  fecha_borra =$5,
+                  activo = false ,
+                  fecha_borra = current_timestamp ,
                   where id= $1`
                   ;
 
-  db.result(sql, campos, r => r.rowCount)
+  db.result(sql, parametros, r => r.rowCount)
       .then(data => {
 
           const objetoMo = {  id : req.params.id, 
@@ -88,7 +88,33 @@ app.put('/api/Heroes/:id', (req, res) => {
 
 
 });
+heroes.delete('/api/Heroes/:id', (req, res) => {
 
+
+  let sql = ` update tbl_heroes
+                 set id = $1,
+                nombre = $2,
+                identidad_secreta =$3,
+                 activo = false , 
+            Where  fecha_borrar = current_timestamp `;
+
+  db.result(sql, [req.params.id] ,   r => r.rowCount)
+      .then(data => {
+
+          
+          const objetoBorrado     = {  id : req.params.id, nombre :req.params.nombre,identidad_secreta : req.params.identidad_secreta,
+                                      activo : false
+                                  };
+          
+          res.json(objetoBorrado);
+
+      })
+      .catch((error) => {
+          res.json(error);
+      });
+
+
+});
 
 heroes.post('/api/Poderes',(req, res)=>{
 
@@ -133,7 +159,60 @@ heroes.get('/api/Poderes',(req, res)=>{
 
 });
 
+heroes.put('/api/Poderes/:id', (req, res) => {
 
+
+  const parametros = [
+    req.params.id,
+    req.body.nombre,
+      req.body.activo,
+      req.body.fecha_borra
+  ];
+
+  let sql = ` update tbl_poderes 
+              set  nombre =  $2,  activo = false ,fecha_borra = current_timestamp ,
+                  where id= $1`;
+
+  db.result(sql, parametros, r => r.rowCount)
+      .then(data => {
+
+          const objetoMo = {  id : req.params.id,    nombre : req.body.nombre,  activo : req.body.activo, fecha_borra : req.body.fecha_borra };
+          
+          res.json(objetoMo);
+
+      })
+      .catch((error) => {
+          res.json(error);
+      });
+
+
+});
+heroes.delete('/api/Poderes/:id', (req, res) => {
+
+
+  let sql = ` update tbl_poderes
+                 set id = $1,
+                nombre = $2,
+                 activo = false , 
+            Where  fecha_borrar = current_timestamp `;
+
+  db.result(sql, [req.params.id] ,   r => r.rowCount)
+      .then(data => {
+
+          
+          const objetoBorrado     = {  id : req.params.id, nombre :req.params.nombre,
+                                      activo : false
+                                  };
+          
+          res.json(objetoBorrado);
+
+      })
+      .catch((error) => {
+          res.json(error);
+      });
+
+
+});
 heroes.post('/api/HeroesPoder',(req, res)=>{
 
 
@@ -179,5 +258,62 @@ heroes.get('/api/HeroesPoder',(req, res)=>{
 
 });
 
+heroes.put('/api/HeroesPoder/:id', (req, res) => {
+
+
+  const parametros = [
+    req.params.id,
+     req.body.id_poder,
+     req.body.id_heroe,
+      req.body.activo,
+      req.body.fecha_borra
+  ];
+
+  let sql = ` update tblheroes_poder 
+                set id_poder=$2, id_heroe =$3 , activo = false ,fecha_borra = current_timestamp ,
+                  where id= $1`;
+
+  db.result(sql, parametros, r => r.rowCount)
+      .then(data => {
+
+          const objetoMo = {  id : req.params.id, nombre : req.body.nombre, 
+            id_poder : req.body.id_poder, id_heroe :req.body.id_heroe, 
+            activo : req.body.activo,
+             fecha_borra : req.body.fecha_borra };
+          
+          res.json(objetoMo);
+
+      })
+      .catch((error) => {
+          res.json(error);
+      });
+});
+heroes.delete('/api/HeroesPoder/:id', (req, res) => {
+
+
+  let sql = ` update tblheroes_poder
+                 set id_poder =$2,
+                 id_heroe = $3,
+                 activo = false , 
+                  fecha_borrar = current_timestamp ,
+              where id = $1 `;
+
+  db.result(sql, [req.params.id] ,   r => r.rowCount)
+      .then(data => {
+
+          
+          const objetoBorrado     = {  id : req.params.id, id_poder :req.params.id_poder, id_heroe : req.params.id_heroe,
+                                      activo : false
+                                  };
+          
+          res.json(objetoBorrado);
+
+      })
+      .catch((error) => {
+          res.json(error);
+      });
+
+
+});
 heroes.listen(4000);
 
