@@ -4,7 +4,7 @@ const db = require('../db/conn'); //para encontrar la base de datos
 
 
 
-heroes.post('/api/HeroesPoder',(req, res)=>{
+heroes.post('',(req, res)=>{
 
 
     let tmpheroes_poder =[
@@ -31,7 +31,7 @@ heroes.post('/api/HeroesPoder',(req, res)=>{
   });
   
   
-  heroes.get('/api/HeroesPoder',(req, res)=>{
+  heroes.get('',(req, res)=>{
     let sql = "select * from tblheroes_poder where activo = true";
   
   
@@ -45,7 +45,7 @@ heroes.post('/api/HeroesPoder',(req, res)=>{
   
   });
   
-  heroes.put('/api/HeroesPoder/:id', (req, res) => {
+  heroes.put('/:id', (req, res) => {
   
   
     const parametros = [
@@ -75,7 +75,7 @@ heroes.post('/api/HeroesPoder',(req, res)=>{
             res.json(error);
         });
   });
-  heroes.delete('/api/HeroesPoder/:id', (req, res) => {
+  heroes.delete('/:id', (req, res) => {
   
   
     let sql = ` update tblheroes_poder
