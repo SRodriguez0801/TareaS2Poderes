@@ -32,9 +32,19 @@ heroes.post('',(req, res)=>{
   
   
   heroes.get('',(req, res)=>{
-    let sql = "select * from tblheroes_poder where activo = true";
+    //let sql = " select * from tblheroes_poder  where activo = true  ";
   
-  
+    let sql = ` select  a.id, 
+                        a.id_heroe, 
+                        b.nombre as nombre_heroe, 
+                        a.id_poder, 
+                        c.nombre  as nombre_poder
+                  from  tblheroes_poder a 
+                  inner join tbl_heroes b on a.id_heroe = b.id 
+                  inner join tbl_poderes c on a.id_poder =c.id 
+              
+                  `;
+
     db.any(sql, e => e.id)
         .then(rows => { res.json(rows); })
         .catch((error) => {
